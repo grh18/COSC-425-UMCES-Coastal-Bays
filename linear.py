@@ -8,6 +8,7 @@ FILENAME = "phosphate.csv"
 FILENAME2 = "silicate.csv"
 FILEPATH = "nutrients/cluster1/"
 DATACOL = 9
+STATION = "I"
 YEARFIRST = 1995
 YEARLAST = 2008
 YLABEL = "PO4 (Micromolars)"
@@ -87,7 +88,7 @@ with open(FILEPATH + FILENAME, encoding='utf-8-sig') as file:
     nutrient = nutrient[0].upper() + nutrient[1:]
     printstats(nutrient, r, p, std_err)
     
-    title = nutrient + " (" + (str)(years[0]) + " - " + (str)(years[-1]) + ")"
+    title = nutrient + " (" + (str)(years[0]) + " - " + (str)(years[-1]) + ") Station " + STATION
     
     fig.text(.1,.89, f"P = {p:.5f}    R\u00b2 = {r*r: .5f}", color = DOTCOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
     axes.scatter(x, y, color=DOTCOLOR, marker = MARK, label = nutrient)
@@ -105,7 +106,7 @@ if (FILENAME2 != ""):
         nutrient2 = nutrient2[0].upper() + nutrient2[1:]
         printstats(nutrient2, r, p, std_err)
         
-        title = nutrient + " & " + nutrient2 + " (" + (str)(years[0]) + " - " + (str)(years[-1]) + ")"
+        title = nutrient + " & " + nutrient2 + " (" + (str)(years[0]) + " - " + (str)(years[-1]) + ") Station " + STATION
         
         fig.text(.6,.89, f"P = {p:.5f}    R\u00b2 = {r*r: .5f}", color = DOTCOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
         axes2 = axes.twinx()
@@ -115,6 +116,7 @@ if (FILENAME2 != ""):
         axes2.set_xticks(BOTTOMSCALE)
         matplotlib.pyplot.ylabel(YLABEL2, color= DOTCOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
 
+fig.text(.05,.75, STATION, fontsize=30, ha="center")
 matplotlib.pyplot.title(title)
 matplotlib.pyplot.tight_layout(pad=4)
 fig.legend(ncol=4, loc = "upper left")
