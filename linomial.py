@@ -1,32 +1,29 @@
 import matplotlib
 import matplotlib.patheffects
 import numpy
-import scipy
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan
 from sklearn.preprocessing import PolynomialFeatures
 import csv
 
 FILENAME = "phosphate.csv"
-FILEPATH = "nutrients/Cluster1/"
+FILEPATH = "nutrients/Cluster4/"
 DATACOL = 9
 YEARCOL = 2
-SEGMENT = "I"
+SEGMENT = "IV"
 YEARFIRST = 1995
 YEARLAST = 2022
 YLABEL = "micromolars"
 DOTCOLOR = "orange"
 LINECOLOR = "red"
 LINETYPE = "solid"
-LINECOLOR2 = "yellow"
-LINETYPE2 = "dotted"
-LINECOLOR3 = "magenta"
-LINETYPE3 = "solid"
+LINECOLOR2 = "magenta"
+LINETYPE2 = "solid"
 MARK = "d"
-LEFTSCALE = numpy.arange(0, 1.1, .25)
-BOTTOMSCALE = numpy.arange(1994, 2025, 2)
-CFACTOR = 3
-DEGREE = 5
+LEFTSCALE = numpy.arange(0, 1.1, .2)
+BOTTOMSCALE = numpy.arange(1994, 2023, 2)
+CFACTOR = .75
+DEGREE = 4
 
 def plot (file, cfactor):
     data=[]
@@ -73,25 +70,26 @@ with open(FILEPATH + FILENAME, encoding='utf-8-sig') as file:
     axes.scatter(x, y, color=DOTCOLOR, marker = MARK)
     
     xc = sm.add_constant(x)
-    model = sm.OLS(y, xc).fit()
+    model = sm.OLS(y, xc).fit(method="qr")
     lm, lm_pvalue, fvalue, f_pvalue = het_breuschpagan(model.resid_pearson, xc)
+    print(lm_pvalue)
     if (lm_pvalue > .05):
         curvey = model.predict(xc)
         axes.plot(x, curvey, marker = "", linestyle = LINETYPE, color=LINECOLOR, label = "OLS Linear Trend")
-        rsq = model.rsquared_adj
+        rsq = model.rsquared
         pval = model.f_pvalue
         fig.text(.2,.89, f"P = {pval:.5f}", color = LINECOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
-        fig.text(.2,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
+        fig.text(.2,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])  
     else:    
         curvex = sm.add_constant(x)
-        w = sm.OLS(y, curvex).fit().resid_pearson
-        model = sm.WLS(y, curvex, weights = 1.0 / w**2).fit()
-        rsq = model.rsquared_adj
+        w = sm.OLS(y, curvex).fit(method="qr").resid_pearson
+        model = sm.WLS(y, curvex, weights = 1.0 / w**2).fit(method="qr")
+        rsq = model.rsquared
         pval = model.f_pvalue
         curvey = model.predict(curvex)
-        axes.plot(x, curvey, marker = "", linestyle = LINETYPE2, color = LINECOLOR2, label = "WLS Linear trend")
-        fig.text(0.2,.89, f"P = {pval:.5f}", color = LINECOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
-        fig.text(0.2,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
+        axes.plot(x, curvey, marker = "", linestyle = LINETYPE, color = LINECOLOR, label = "WLS Linear trend")
+        fig.text(0.2,.89, f"P = {pval:.5f}", color = LINECOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
+        fig.text(0.2,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
         
     x2 = numpy.array(x).reshape(-1, 1)
     y2 = numpy.array(y).reshape(-1, 1)
@@ -100,11 +98,11 @@ with open(FILEPATH + FILENAME, encoding='utf-8-sig') as file:
     curvex = sm.add_constant(curvex)
     model = sm.OLS(y2, curvex).fit(method = 'qr')
     curvey = model.predict(curvex)
-    axes.plot(x, curvey, marker = "", linestyle = LINETYPE3, color = LINECOLOR3, label = f"Degree {DEGREE} Polynomial Trend")   
-    rsq = model.rsquared_adj
+    axes.plot(x, curvey, marker = "", linestyle = LINETYPE2, color = LINECOLOR2, label = f"Degree {DEGREE} Polynomial Trend")   
+    rsq = model.rsquared
     pval = model.f_pvalue
-    fig.text(.5,.89, f"P = {pval:.5f} ", color = LINECOLOR3).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])    
-    fig.text(.5,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR3).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
+    fig.text(.5,.89, f"P = {pval:.5f} ", color = LINECOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])    
+    fig.text(.5,.85, f"R\u00b2 = {rsq: .5f}", color = LINECOLOR2).set_path_effects([matplotlib.patheffects.withSimplePatchShadow(offset=(.6, -.6), shadow_rgbFace="black", alpha = .5, rho = 0)])
     
     nutrient = (FILENAME.split('.'))[0]
     nutrient = nutrient[0].upper() + nutrient[1:]
