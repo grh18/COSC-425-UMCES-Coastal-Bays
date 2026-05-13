@@ -1,0 +1,84 @@
+SLOPE COMPARISON FINDINGS
+UMCES Coastal Bays Project — Nutrient Trend Analysis (1995–2008)
+=================================================================
+
+WHAT THE SLOPE MEANS
+---------------------
+The OLS (Ordinary Least Squares) slope represents the average rate of change
+per year for a given nutrient in a given coastal bay segment. It is derived
+from a linear regression fit to yearly-averaged concentration data.
+
+  - Positive slope = nutrient concentration trending upward over time
+  - Negative slope = nutrient concentration trending downward over time
+  - Near zero      = relatively stable, no strong directional trend
+
+Units are micromolars per year (chlorophyll in μg/L per year).
+
+
+WHAT THE CHART SHOWS
+---------------------
+Each group of bars represents one coastal bay segment (I–VII). Within each
+group, one bar is shown per nutrient (phosphate, nitrate, silicate, ammonium,
+chlorophyll). This allows two types of comparison simultaneously:
+
+  - Across nutrients within a segment: are all nutrients behaving the same
+    way, or do some diverge?
+  - Across segments for one nutrient: is a trend bay-wide or localized?
+
+
+COMPUTED SLOPES (micromolars/year)
+-----------------------------------
+Segment   | Phosphate  | Nitrate    | Silicate   | Ammonium   | Chlorophyll
+----------|------------|------------|------------|------------|------------
+I         |  0.012426  | -0.001802  |  0.155483  |  0.092790  |  0.031843
+II        |  0.008525  |  0.001998  |  0.191902  |  0.151367  |  0.071116
+III       |  0.009233  | -0.019169  |  0.236958  |  0.162089  |  0.077749
+IV        |  0.009197  | -0.001303  |  0.319998  |  0.124380  |  0.128179
+V         |  0.011013  |  0.009650  |  0.343846  |  0.151182  |  0.043611
+VI        |  0.014731  |  0.001376  |  0.438407  |  0.167456  |  0.117566
+VII       |  0.004791  |  0.004647  |  0.003833  |  0.131985  |  0.050281
+
+
+KEY FINDINGS
+-------------
+1. SILICATE IS RISING FASTEST across nearly all segments. Segment VI shows
+   the steepest increase (~0.44 micromolars/year), and the trend holds
+   consistently from Segments I through VI. This may indicate changes in
+   freshwater input, sediment flux, or shifts in diatom activity across
+   the bay.
+
+2. NITRATE IS THE ONLY NUTRIENT DECLINING in some segments (I, III, IV),
+   diverging from the upward trend seen in all other nutrients. This could
+   reflect localized remediation efforts, different pollution sources, or
+   biological uptake patterns specific to those areas.
+
+3. AMMONIUM INCREASES CONSISTENTLY ACROSS ALL SEVEN SEGMENTS with no
+   exceptions. This suggests a bay-wide pressure — such as atmospheric
+   deposition or widespread agricultural runoff — rather than a source
+   localized to any one area.
+
+4. SEGMENT VII IS ANOMALOUS — nearly all nutrients show near-zero slopes,
+   behaving fundamentally differently from the rest of the bay. This may
+   reflect its geographic position, reduced human impact, or distinct
+   hydrological characteristics compared to other segments.
+
+
+WHY THIS ANALYSIS MATTERS
+--------------------------
+The individual regression plots (linomial.py) show one nutrient in one
+segment at a time. The slope comparison shows the entire system at once,
+making cross-segment and cross-nutrient patterns visible that would otherwise
+require mentally assembling dozens of individual graphs. It answers not just
+"is this nutrient changing?" but "where is it changing, how fast, and does
+it match what other nutrients are doing in the same location?"
+
+
+PRESENTATION SUMMARY (suggested language)
+------------------------------------------
+"Each bar represents how fast a nutrient was changing per year in a given
+segment, based on a linear regression of historical water quality data from
+1995 to 2008. A taller bar means a faster rate of increase; a bar going
+below zero means that nutrient was declining over the period. This allows us
+to compare not just individual nutrients over time, but how different parts
+of the bay are responding differently to the same nutrient pressures —
+revealing both bay-wide trends and localized anomalies in a single view."
